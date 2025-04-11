@@ -1,0 +1,9 @@
+{
+    "STYLED_TEMPLATE_CLOUD": "stylestore/styled_template/",
+    "CONTENT_IMAGE_CLOUD": "stylestore/content_image/",
+    "RESULT_IMAGE_CLOUD": "stylestore/result_image/",
+    "RESULT_IMAGE": "static/result_images/123.jpg",
+    "STYLES_IMAGE_MODEL": "static/styles/",
+    "COMPLETE_SHIRT": "media/content/"
+}
+

@@ -1,0 +1,115 @@
+{% load static %}
+{% load custom_template_tags %}
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>
+        Stylestore | {% block title %} {% endblock %}
+    </title>
+
+    <!-- Bootstrap CSS -->
+    <script src="https://kit.fontawesome.com/01bc33b6b0.js" crossorigin="anonymous"></script>
+    {% if user.is_authenticated %}
+    <link rel="stylesheet" href="{% static 'css/cart.css'%}">
+    {% endif %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    {% block style %} {% endblock %}
+</head>
+<body style="overflow-x:hidden;">
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="{% url 'index' %}">Stylestore</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'index' %}">Home <span class="sr-only">(current)</span></a>
+                </li>
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'register' %}">Register</a>
+                </li>
+                {% endif %}
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+            {% if user.is_authenticated %}
+            <button class="bg-dark" style="padding: 10px;margin: auto 10px;border:0;color: white;" onclick="fadeToggleCart()" id="cartButton">
+                <i class="fas fa-shopping-cart"></i> Cart
+                <span class="badge">{{ cart_products|length }}</span>
+            </button>
+            {% endif %}
+        </div>
+    </nav>
+
+
+
+
+
+
+
+
+
+
+    {% if user.is_authenticated %}
+  <div class="shopping-cart float-right" id="navbarCart" style="display: none;">
+    <div class="shopping-cart-header">
+      <i class="fa fa-shopping-cart cart-icon"></i><span class="badge">{{ cart_products|length }}</span>
+      <div class="shopping-cart-total">
+        <span class="lighter-text">Total:</span>
+        <span class="main-color-text">{{total_cart_payable}} INR</span>
+      </div>
+    </div> <!--end shopping-cart-header -->
+
+    {% if cart_products %}
+    <ul class="shopping-cart-items">
+        {% for each_product in nav_cart_products %}
+        <li class="clearfix">
+            <span class="item-name">{{each_product.template.name}}</span>
+            <span class="item-price">{{each_product.unit_price}} INR</span>
+            <span class="item-quantity">Quantity: {{each_product.quantity}}</span>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+        <div class="py-5 text-center">
+            <h3>Cart is empty</h3>
+        </div>
+    {% endif %}
+
+    <a href="{% url 'checkout' %}"><button class="btn btn-primary" style="width: 40%;margin: 0 4%;">Checkout</button></a>
+    <a href="{% url 'cart' %}"><button class="btn btn-primary" style="width: 40%;margin: 0 4%;">View All</button></a>
+  </div> <!--end shopping-cart -->
+    {% endif %}
+
+
+    {% block content %} {% endblock %}
+
+    <!-- Optional JavaScript -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="{% static 'js/index.js' %}"></script>
+    {% if user.is_authenticated %}
+    <script type="text/javascript" src="{% static 'js/cart.js' %}"></script>
+    {% endif %}
+    {% block script %} {% endblock %}
+</body>
+</html>

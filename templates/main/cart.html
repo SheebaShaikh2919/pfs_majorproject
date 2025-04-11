@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_template_tags %}
+{% block title %}
+Cart
+{% endblock %}
+{% block style %}
+    <style>
+    .product_image {
+        position: absolute;
+        z-index: 5;
+        display: none;
+    }
+    </style>
+{% endblock %}
+{% block content %}
+    {% if cart_products %}
+    {% csrf_token %}
+    <div class="container-fluid">
+        <div class="py-5 text-center">
+            <button class="btn btn-primary float-right m-1" onclick="saveCart()">Save Cart</button>
+            <a href="{% url 'checkout' %}"><button class="btn btn-primary float-right m-1">Checkout <i class="fas fa-long-arrow-alt-right"></i></button></a>
+            <h2>Cart</h2>
+        </div>
+
+        <table class="table table-hover text-center">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Unit Price</th>
+                    <th scope="col">Expected Delivery</th>
+                    <th scope="col">Total Price</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for each_product in cart_products %}
+                <tr onmouseover="showProductImg(this)" onmouseout="hideProductImg(this)">
+                    <th scope="row">{{forloop.counter}}</th>
+                    <td>
+                        {{each_product.template.name}}
+                        <img src="{{each_product.styled_template_url}}" class="product_image">
+                    </td>
+                    <td>
+                        <i class="fas fa-minus-circle decQty" onclick="changeCartQuantity(this, -1)" style="cursor: pointer;"></i>
+                        <input type="text" class="cartId" value="{{each_product.id}}" hidden>
+                        <input type="text" class="isUpdated" value="0" hidden>
+                        <span class="cartQty">{{each_product.quantity}}</span>
+                        <i class="fas fa-plus-circle incQty" onclick="changeCartQuantity(this, 1)" style="cursor: pointer;"></i>
+                    </td>
+                    <td>
+                        <i class="fas fa-rupee-sign unit_price">
+                        {{each_product.unit_price}}
+                        </i>
+                    </td>
+                    <td>Delivery by Tomorrow</td>
+                    <td>
+                        <i class="fas fa-rupee-sign total_price">
+                        {% multiply each_product.quantity each_product.unit_price %}
+                        </i>
+                    </td>
+                    <td>
+                        <i class="fas fa-trash-alt" onclick="deleteProduct(this)" style="cursor: pointer;"></i>
+                    </td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td colspan="4"></td>
+                    <td><strong>Total Payable:</strong></td>
+                    <td><i class="fas fa-rupee-sign" id="total_payable"> {{total_cart_payable}}</i></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="container-fluid">
+        <div class="py-5 text-center">
+            <h2>Cart</h2>
+            <h3>Cart is empty</h3>
+        </div>
+    {% endif %}
+{% endblock %}

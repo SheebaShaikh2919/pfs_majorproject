@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+404
+{% endblock %}
+{% block content %}
+<div class="jumbotron">
+    <div class="container">
+        <h1 class="display-1">Oops! 404 Not Found</h1>
+        <div class="lead text-right">
+            Sorry, an error has occured, Requested page not found!
+        </div>
+        <a href="{% url 'index' %}" class="btn btn-outline-dark btn-lg mx-5">
+            <i class="fas fa-home"></i>
+            Take Me Home
+        </a>
+        <a href="#" class="btn btn-outline-dark btn-lg">
+            <i class="fas fa-envelope"></i>
+            Contact Support
+        </a>
+    </div>
+</div>
+{% endblock %}

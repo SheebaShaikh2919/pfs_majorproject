@@ -1,0 +1,25 @@
+========================================================================
+SQLite version 3.29.0 2019-07-10 17:32:03
+Enter ".help" for usage hints.
+sqlite> .tables
+auth_group                  django_admin_log
+auth_group_permissions      django_content_type
+auth_permission             django_migrations
+auth_user                   django_session
+auth_user_groups            shirt_completeshirt
+auth_user_user_permissions  shirt_styleshirt
+sqlite> select * from shirt_styleshirt
+   ...> ;
+2|rain princess|styles/rain_princess.jpg|styles/model_62.h5
+5|udnie|styles/udnie.jpg|styles/udnie2epoch.h5
+7|colors|styles/music.jpg|styles/music2epoch.h5
+8|bricks|styles/WhatsApp_Image_2020-02-06_at_10.47.36_PM.jpeg|styles/model_13_1.h5
+9|starry_night|styles/WhatsApp_Image_2020-02-07_at_6.52.28_PM.jpeg|styles/model_19_1.h5
+sqlite> .quit
+========================================================================
+
+https://simpleisbetterthancomplex.com/tutorial/2018/08/13/how-to-use-bootstrap-4-forms-with-django.html
+
+========================================================================
+Cart in navbar
+pass a data from database globally in django

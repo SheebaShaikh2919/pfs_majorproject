@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+Home
+{% endblock %}
+{% block content %}
+    <div class="jumbotron">
+        <div class="container">
+            <h1 class="display-2">Welcome to Stylestore</h1>
+            <p class="lead text-right">A wide range of styles and products are available ...</p>
+        </div>
+    </div>
+
+    {% if styleshirts %}
+    <div class="container-fluid">
+        <h2 class="display-4">Choose what suits you</h2>
+        <form method="POST" enctype="multipart/form-data" action="">
+            {% csrf_token %}
+            <!-- form.as_p}} -->
+            <div class="row">
+            {% for styleshirt in styleshirts %}
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <div style="margin: 10px 1px; padding: 0px;" class="card border border-info" onclick="highlightImage(this)">
+                    <input type="radio" value="{{styleshirt.id}}" name="style" hidden>
+                    <img src="{% static styleshirt.image %}" style = "width: 100%; height: 300px;" class="card-img-top img-fluid img-thumbnail" alt="{{styleshirt.name}}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{styleshirt.name}}</h5>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            </div>
+
+            <div class="form-group">
+                <label for="id_content_image">Upload Content Image</label>
+                <input type="file" class="form-control-file" name="content_image" id="id_content_image">
+            </div>
+
+            <button type="submit" class="btn btn-success">SUBMIT</button>
+        </form>
+    </div>
+    <br>
+    {% else %}
+    No styles present currently
+    {% endif %}
+
+    {% if errors %}
+    <div class="row justify-content-center">
+        <div class="offset-0 col-8 offset-sm-0 col-sm-10 offset-md-0 col-md-10">
+        {% for error in errors %}
+            <div class="alert alert-danger text-center">{{error}}</div>
+        {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    <br>
+        <hr>
+    </div>
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_template_tags %}
+{% block title %}
+Book Products
+{% endblock %}
+{% block style %}
+    <style>
+    .fa-share {
+        cursor: pointer;
+    }
+    .fa-share:hover {
+        color: blue;
+    }
+    /*
+    .styleimage, .templateimage {
+        width: 512px;
+        height: 512px;
+    }
+    */
+    </style>
+{% endblock %}
+{% block content %}
+
+    <div class="container-fluid">
+        <br>
+
+        <a href="{% url 'display' %}">
+            <button type="button" class="btn btn-primary btn-lg float-right">
+                Checkout <i class="fas fa-long-arrow-alt-right"></i>
+            </button>
+        </a>
+    
+        <br><br><br>
+        {% for each_template in templates %}
+        <div class="row">
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3 styleimage">
+                <div style="margin: 0px -15px;" class="" onclick="highlightImage(this)">
+                    <img src="{% access styled_templates each_template.id %}" alt="stylized_image" class="templateimage" style="width: 100%">
+                    <input type="text" value="{{each_template.id}}" class="templateid" hidden>
+                    <input type="text" value="" class="cartid" hidden>
+                </div>
+            </div>
+            <div class="col-12 col-sm-12 col-md-8 col-lg-6" style="margin: auto;">
+                    {% csrf_token %}
+                    <i class="fas fa-share float-right" onclick="shareProduct(this)"> Share</i>
+                    <h5>Product Description</h5>
+                    <p>
+                    Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+                    when an unknown printer took a galley of type and scrambled it to make a type
+                    specimen book.
+                    </p>
+                    <h5>Price: <i class="fas fa-rupee-sign"> {{each_template.unit_price}}</i></h5>
+                    <strong>Available Sizes:</strong>
+                    <input type="text" name="productsizes" class="productsizesclass" value="" hidden>
+                    <input name="productsizesbutton" class="productsizesclass btn btn-primary btn-sm" type="button" value="L" onclick="selectSize(this)">
+                    <input name="productsizesbutton" class="productsizesclass btn btn-primary btn-sm" type="button" value="XL" onclick="selectSize(this)">
+                    <input name="productsizesbutton" class="productsizesclass btn btn-primary btn-sm" type="button" value="XXL" onclick="selectSize(this)">
+                    <input name="productsizesbutton" class="productsizesclass btn btn-primary btn-sm" type="button" value="XXXL" onclick="selectSize(this)">
+                    <br><br>
+
+                    <input type="text" name="products" class="productstatusclass" value="n" hidden>
+                    <i class="fas fa-minus-circle decQty" onclick="changeCartQuantity(this, -1)"></i>
+                        <span class="cartQty">0</span>
+                    <i class="fas fa-plus-circle incQty" onclick="changeCartQuantity(this, 1)"></i>
+                    <button type="button" class="btn btn-primary btn-lg" onclick="changeStatusInCart(this)">Add to Cart</button>
+            </div>
+        </div>
+        <br>
+        {% endfor %}
+
+
+        <hr>
+    </div>
+{% endblock %}
+{% block script %}
+    <script type="text/javascript" src="{% static 'js/display.js' %}"></script>
+{% endblock %}
