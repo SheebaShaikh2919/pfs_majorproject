@@ -6,24 +6,196 @@
 Login
 {% endblock %}
 
+{% block style %}
+<style>
+@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
+* {
+  box-sizing: border-box;
+}
+.login-container {
+  display: grid;
+  place-items: center;
+  min-height: 70vh;
+  background: #dde1e7;
+  text-align: center;
+  padding: 30px 0;
+  border-radius: 15px;
+  margin-top: 30px;
+}
+.content {
+  width: 380px;
+  padding: 40px 30px;
+  background: #dde1e7;
+  border-radius: 10px;
+  box-shadow: -3px -3px 7px #ffffff73,
+              2px 2px 5px rgba(94,104,121,0.288);
+}
+.content .text {
+  font-size: 33px;
+  font-weight: 600;
+  margin-bottom: 35px;
+  color: #595959;
+  font-family: 'Playfair Display', serif;
+}
+.neumorphic-input {
+  height: 50px;
+  width: 100%;
+  margin-bottom: 20px;
+  position: relative;
+}
+.neumorphic-input input {
+  height: 100%;
+  width: 100%;
+  padding: 0 45px;
+  outline: none;
+  border: none;
+  font-size: 18px;
+  background: #dde1e7;
+  color: #595959;
+  border-radius: 25px;
+  box-shadow: inset 2px 2px 5px #BABECC,
+              inset -5px -5px 10px #ffffff73;
+}
+.neumorphic-input input:focus {
+  box-shadow: inset 1px 1px 2px #BABECC,
+              inset -1px -1px 2px #ffffff73;
+}
+.neumorphic-input span {
+  position: absolute;
+  color: var(--primary-color);
+  width: 50px;
+  line-height: 50px;
+  left: 15px;
+}
+.login-btn {
+  margin: 25px 0 10px;
+  width: 100%;
+  height: 50px;
+  font-size: 18px;
+  line-height: 50px;
+  font-weight: 600;
+  background: #dde1e7;
+  border-radius: 25px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  color: #595959;
+  box-shadow: 2px 2px 5px #BABECC,
+             -5px -5px 10px #ffffff73;
+  transition: all 0.3s ease;
+}
+.login-btn:hover {
+  background: var(--accent-color);
+  color: white;
+  box-shadow: 2px 2px 5px rgba(78, 205, 196, 0.4),
+             -2px -2px 5px rgba(255, 255, 255, 0.4);
+}
+.login-btn:focus {
+  color: white;
+  background-color: var(--accent-color);
+  box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.2),
+              inset -2px -2px 5px rgba(255, 255, 255, 0.1);
+}
+.sign-up {
+  margin: 20px 0;
+  color: #595959;
+  font-size: 16px;
+}
+.sign-up a {
+  color: var(--accent-color);
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+.sign-up a:hover {
+  color: var(--secondary-color);
+  text-decoration: underline;
+}
+.alert {
+  margin-bottom: 20px;
+  border-radius: 10px;
+  box-shadow: 2px 2px 5px #BABECC,
+             -2px -2px 5px #ffffff73;
+}
+/* Error handling */
+.error-feedback {
+  color: var(--secondary-color);
+  font-size: 14px;
+  text-align: left;
+  margin-top: 5px;
+  margin-left: 10px;
+}
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-8">
-            <br>
-            <h1>Login Page</h1>
-            <hr class="mt-0 mb-4">
-            {% if error %}
-                {{ error }}
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="login-container">
+        <div class="content">
+          <div class="text">
+            Login Form
+          </div>
+          
+          {% if error %}
+            <div class="alert alert-danger" role="alert">
+              {{ error }}
+            </div>
+          {% endif %}
+          
+          <form action="" method="post">
+            {% csrf_token %}
+            
+            {% if form.non_field_errors %}
+              <div class="alert alert-danger" role="alert">
+                {% for error in form.non_field_errors %}
+                  {{ error }}
+                {% endfor %}
+              </div>
             {% endif %}
-            <form action="" method="post">
-                {% csrf_token %}
-                {{ form|crispy }}
-                <button type="submit" class="btn btn-success">Login</button>
-            </form>
-            <br>
+            
+            <!-- Username field -->
+            <div class="neumorphic-input">
+              <span class="fas fa-user"></span>
+              <input type="{{ form.username.field.widget.input_type }}" name="{{ form.username.name }}" id="{{ form.username.id_for_label }}" {% if form.username.value %}value="{{ form.username.value }}"{% endif %} placeholder="{{ form.username.label }}" required>
+              {% if form.username.errors %}
+                <div class="error-feedback">
+                  {% for error in form.username.errors %}
+                    {{ error }}
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </div>
+            
+            <!-- Password field -->
+            <div class="neumorphic-input">
+              <span class="fas fa-lock"></span>
+              <input type="password" name="{{ form.password.name }}" id="{{ form.password.id_for_label }}" placeholder="{{ form.password.label }}" required>
+              {% if form.password.errors %}
+                <div class="error-feedback">
+                  {% for error in form.password.errors %}
+                    {{ error }}
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </div>
+            
+            <button type="submit" class="login-btn">Sign in</button>
+            
+            <div class="sign-up">
+              Not a member?
+              <a href="{% url 'register' %}">signup now</a>
+            </div>
+          </form>
         </div>
+      </div>
     </div>
+  </div>
 </div>
 {% endblock %}
 
+{% block script %}
+<script>
+  // Add any login-specific JavaScript here if needed
+</script>
+{% endblock %}
