@@ -1,0 +1,406 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+Collections | TrendBlend
+{% endblock %}
+{% block content %}
+    <!-- Custom CSS for neumorphic styling -->
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background: #dde1e7;
+            color: #595959;
+        }
+        
+        .jumbotron {
+            background: #dde1e7;
+            color: #595959;
+            border-radius: 0 0 25px 25px;
+            margin-bottom: 40px;
+            box-shadow: -3px -3px 7px #ffffff73,
+                        2px 2px 5px rgba(94,104,121,0.288);
+            padding: 40px 20px;
+        }
+        
+        .container-fluid {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .collection-card {
+            margin: 30px 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: #dde1e7;
+            border-radius: 20px;
+            box-shadow: -3px -3px 7px #ffffff73,
+                        2px 2px 5px rgba(94,104,121,0.288);
+            display: flex;
+            flex-direction: column;
+            height: 350px;
+        }
+        
+        .collection-card:hover {
+            transform: translateY(-5px);
+            box-shadow: -5px -5px 10px #ffffff73,
+                        5px 5px 10px rgba(94,104,121,0.288);
+        }
+        
+        .collection-card img {
+            width: 100%;
+            height: 65%;
+            object-fit: cover;
+            transition: all 0.3s ease;
+            border-radius: 20px 20px 0 0;
+            padding: 15px;
+        }
+        
+        .collection-header {
+            margin: 40px 0 20px;
+            padding: 15px 30px;
+            border-radius: 15px;
+            box-shadow: -3px -3px 7px #ffffff73,
+                        2px 2px 5px rgba(94,104,121,0.288);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .collection-header h3 {
+            margin: 0;
+            color: #595959;
+            font-weight: 600;
+        }
+        
+        .view-all {
+            background: #dde1e7;
+            color: #3498db;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: -2px -2px 5px #ffffff73,
+                        2px 2px 5px rgba(94,104,121,0.288);
+        }
+        
+        .view-all:hover {
+            box-shadow: -3px -3px 7px #ffffff73,
+                        3px 3px 7px rgba(94,104,121,0.288);
+        }
+        
+        .view-all:active {
+            box-shadow: inset 1px 1px 2px #BABECC,
+                        inset -1px -1px 2px #ffffff73;
+        }
+        
+        .card-body {
+            padding: 20px;
+            height: 35%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #595959;
+        }
+        
+        .card-text {
+            font-size: 14px;
+            color: #666666;
+        }
+        
+        .item-count {
+            font-size: 12px;
+            color: #3498db;
+            font-weight: 500;
+            margin-top: 8px;
+        }
+        
+        .filter-bar {
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 15px;
+            box-shadow: -3px -3px 7px #ffffff73,
+                        2px 2px 5px rgba(94,104,121,0.288);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .filter-btn {
+            background: #dde1e7;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 14px;
+            color: #595959;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: -2px -2px 5px #ffffff73,
+                        2px 2px 5px rgba(94,104,121,0.288);
+        }
+        
+        .filter-btn:hover {
+            color: #3498db;
+        }
+        
+        .filter-btn.active {
+            color: #3498db;
+            box-shadow: inset 2px 2px 5px #BABECC,
+                        inset -2px -2px 5px #ffffff73;
+        }
+        
+        .search-box {
+            width: 100%;
+            max-width: 400px;
+            margin: 20px auto;
+            position: relative;
+        }
+        
+        .search-input {
+            width: 100%;
+            height: 50px;
+            border-radius: 25px;
+            border: none;
+            outline: none;
+            background: #dde1e7;
+            padding: 0 20px 0 45px;
+            font-size: 16px;
+            color: #595959;
+            box-shadow: inset 2px 2px 5px #BABECC,
+                        inset -5px -5px 10px #ffffff73;
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666666;
+        }
+        
+        .seasonal-tag {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            background: #dde1e7;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #3498db;
+            box-shadow: -2px -2px 5px #ffffff73,
+                        2px 2px 5px rgba(94,104,121,0.288);
+        }
+        
+        .trending-tag {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            background: #dde1e7;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #e74c3c;
+            box-shadow: -2px -2px 5px #ffffff73,
+                        2px 2px 5px rgba(94,104,121,0.288);
+        }
+        
+        .new-tag {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            background: #dde1e7;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #2ecc71;
+            box-shadow: -2px -2px 5px #ffffff73,
+                        2px 2px 5px rgba(94,104,121,0.288);
+        }
+    </style>
+
+    <div class="jumbotron">
+        <div class="container">
+            <h1 class="display-3">TrendBlend Collections</h1>
+            <p class="lead">Discover our curated collections of unique style themes</p>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="search-box">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-input" placeholder="Search collections...">
+        </div>
+        
+        <div class="filter-bar">
+            <button class="filter-btn active">All</button>
+            <button class="filter-btn">Seasonal</button>
+            <button class="filter-btn">Trending</button>
+            <button class="filter-btn">New Arrivals</button>
+            <button class="filter-btn">Casual</button>
+            <button class="filter-btn">Formal</button>
+            <button class="filter-btn">Urban</button>
+        </div>
+        
+        <!-- Featured Collection -->
+        <div class="collection-header">
+            <h3>Featured Collections</h3>
+            <button class="view-all">View All</button>
+        </div>
+        
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <div class="collection-card position-relative">
+                    <span class="seasonal-tag">Seasonal</span>
+                    <img src="{% static 'images/about1.jpg' %}" class="img-fluid" alt="Spring Collection">
+                    <div class="card-body">
+                        <h5 class="card-title">Spring 2025 Collection</h5>
+                        <p class="card-text">Fresh and vibrant styles perfect for the spring season.</p>
+                        <p class="item-count">24 Items</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="collection-card position-relative">
+                    <span class="trending-tag">Trending</span>
+                    <img src="{% static 'images/about2.jpg' %}" class="img-fluid" alt="Urban Collection">
+                    <div class="card-body">
+                        <h5 class="card-title">Urban Street Style</h5>
+                        <p class="card-text">Bold and contemporary designs inspired by city life.</p>
+                        <p class="item-count">18 Items</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Trending Collection -->
+        <div class="collection-header">
+            <h3>Trending Now</h3>
+            <button class="view-all">View All</button>
+        </div>
+        
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <div class="collection-card position-relative">
+                    <span class="trending-tag">Trending</span>
+                    <img src="{% static 'images/about1.jpg' %}" class="img-fluid" alt="Minimalist Collection">
+                    <div class="card-body">
+                        <h5 class="card-title">Minimalist Chic</h5>
+                        <p class="card-text">Clean lines and subtle designs for a sophisticated look.</p>
+                        <p class="item-count">15 Items</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="collection-card position-relative">
+                    <span class="trending-tag">Trending</span>
+                    <img src="{% static 'images/about2.jpg' %}" class="img-fluid" alt="Vintage Collection">
+                    <div class="card-body">
+                        <h5 class="card-title">Vintage Reimagined</h5>
+                        <p class="card-text">Classic styles with a modern twist for a timeless appeal.</p>
+                        <p class="item-count">20 Items</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- New Arrivals -->
+        <div class="collection-header">
+            <h3>New Arrivals</h3>
+            <button class="view-all">View All</button>
+        </div>
+        
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <div class="collection-card position-relative">
+                    <span class="new-tag">New</span>
+                    <img src="{% static 'images/about1.jpg' %}" class="img-fluid" alt="Summer Collection">
+                    <div class="card-body">
+                        <h5 class="card-title">Summer Breeze</h5>
+                        <p class="card-text">Light and airy designs perfect for warm weather days.</p>
+                        <p class="item-count">12 Items</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="collection-card position-relative">
+                    <span class="new-tag">New</span>
+                    <img src="{% static 'images/about2.jpg' %}" class="img-fluid" alt="Athletic Collection">
+                    <div class="card-body">
+                        <h5 class="card-title">Active Lifestyle</h5>
+                        <p class="card-text">Performance-focused designs for your active lifestyle.</p>
+                        <p class="item-count">16 Items</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Filter button functionality
+        document.querySelectorAll('.filter-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from all buttons
+                document.querySelectorAll('.filter-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                // In a real application, you would filter the collections here
+                // For this demo, we'll just show the animation
+                const cards = document.querySelectorAll('.collection-card');
+                cards.forEach(card => {
+                    card.style.opacity = '0.5';
+                    card.style.transform = 'scale(0.95)';
+                    
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'scale(1)';
+                    }, 300);
+                });
+            });
+        });
+        
+        // Search functionality (simple demo)
+        const searchInput = document.querySelector('.search-input');
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const cards = document.querySelectorAll('.collection-card');
+            
+            cards.forEach(card => {
+                const title = card.querySelector('.card-title').textContent.toLowerCase();
+                const description = card.querySelector('.card-text').textContent.toLowerCase();
+                
+                if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    </script>
+{% endblock %}
