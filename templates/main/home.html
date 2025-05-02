@@ -4,9 +4,192 @@
 Home
 {% endblock %}
 {% block content %}
+    <!-- Custom CSS for neumorphic styling -->
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background: #dde1e7;
+            color: #595959;
+        }
+        
+        .jumbotron {
+            background: #dde1e7;
+            color: #595959;
+            border-radius: 0 0 25px 25px;
+            margin-bottom: 40px;
+            box-shadow: -3px -3px 7px #ffffff73,
+                        2px 2px 5px rgba(94,104,121,0.288);
+            padding: 40px 20px;
+        }
+        
+        .container-fluid {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .style-card {
+            margin: 30px 15px;
+            aspect-ratio: 1/1;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: #dde1e7;
+            border-radius: 20px;
+            box-shadow: -3px -3px 7px #ffffff73,
+                        2px 2px 5px rgba(94,104,121,0.288);
+            display: flex;
+            flex-direction: column;
+            height: 500px;
+        }
+        
+        .style-card:hover {
+            transform: translateY(-5px);
+            box-shadow: -5px -5px 10px #ffffff73,
+                        5px 5px 10px rgba(94,104,121,0.288);
+        }
+        
+        .style-card img {
+            width: 100%;
+            height: 75%;
+            object-fit: cover;
+            transition: all 0.3s ease;
+            border-radius: 20px 20px 0 0;
+            padding: 15px;
+        }
+        
+        .style-card.selected {
+            box-shadow: inset 2px 2px 5px #BABECC,
+                        inset -5px -5px 10px #ffffff73;
+        }
+        
+        .style-card.selected img {
+            transform: scale(0.98);
+        }
+        
+        .card-body {
+            padding: 20px;
+            height: 25%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .card-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #595959;
+        }
+        
+        .card-text {
+            font-size: 14px;
+            color: #666666;
+        }
+        
+        .display-2, .display-4 {
+            font-weight: 600;
+            color: #595959;
+        }
+        
+        .custom-file-upload {
+            height: 60px;
+            width: 100%;
+            max-width: 400px;
+            margin: 30px auto;
+            display: flex;
+            position: relative;
+            border-radius: 30px;
+            box-shadow: -3px -3px 7px #ffffff73,
+                        2px 2px 5px rgba(94,104,121,0.288);
+            overflow: hidden;
+        }
+        
+        .custom-file-upload input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        
+        .custom-file-upload label {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #595959;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 0 20px;
+        }
+        
+        .custom-file-upload:hover {
+            box-shadow: -4px -4px 8px #ffffff73,
+                        4px 4px 8px rgba(94,104,121,0.288);
+        }
+        
+        .custom-file-upload:active {
+            box-shadow: inset 2px 2px 5px #BABECC,
+                        inset -5px -5px 10px #ffffff73;
+        }
+        
+        .submit-btn {
+            margin: 30px auto;
+            width: 100%;
+            max-width: 300px;
+            height: 60px;
+            font-size: 20px;
+            font-weight: 600;
+            background: #dde1e7;
+            border-radius: 30px;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            color: #595959;
+            box-shadow: -3px -3px 7px #ffffff73,
+                        2px 2px 5px rgba(94,104,121,0.288);
+            transition: all 0.3s ease;
+        }
+        
+        .submit-btn:hover {
+            box-shadow: -5px -5px 10px #ffffff73,
+                        5px 5px 10px rgba(94,104,121,0.288);
+            color: #3498db;
+        }
+        
+        .submit-btn:active {
+            box-shadow: inset 2px 2px 5px #BABECC,
+                        inset -5px -5px 10px #ffffff73;
+        }
+        
+        .file-name {
+            margin-top: 10px;
+            font-size: 16px;
+            color: #3498db;
+        }
+        
+        .row {
+            justify-content: center;
+        }
+    </style>
+
     <div class="jumbotron">
         <div class="container">
-            <h1 class="display-2">Welcome to Stylestore</h1>
+            <h1 class="display-2">Welcome to TrendBlend</h1>
             <p class="lead text-right">A wide range of styles and products are available ...</p>
         </div>
     </div>
@@ -19,34 +202,42 @@ Home
             <!-- form.as_p}} -->
             <div class="row">
             {% for styleshirt in styleshirts %}
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                <div style="margin: 10px 1px; padding: 0px;" class="card border border-info" onclick="highlightImage(this)">
-                    <input type="radio" value="{{styleshirt.id}}" name="style" hidden>
-                    <img src="{% static styleshirt.image %}" style = "width: 100%; height: 300px;" class="card-img-top img-fluid img-thumbnail" alt="{{styleshirt.name}}">
-                    <div class="card-body">
-                        <h5 class="card-title">{{styleshirt.name}}</h5>
+                <div class="col-12 col-md-6">
+                    <div class="style-card" onclick="selectCard(this)">
+                        <input type="radio" value="{{styleshirt.id}}" name="style" hidden>
+                        <img src="{% static styleshirt.image %}" class="img-fluid" alt="{{styleshirt.name}}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{styleshirt.name}}</h5>
+                            <p class="card-text">Perfect style for a trendy and unique look. Express your personality with this amazing design.</p>
+                        </div>
                     </div>
                 </div>
-            </div>
             {% endfor %}
             </div>
 
-            <div class="form-group">
-                <label for="id_content_image">Upload Content Image</label>
-                <input type="file" class="form-control-file" name="content_image" id="id_content_image">
+            <div class="text-center">
+                <div class="custom-file-upload">
+                    <input type="file" name="content_image" id="id_content_image" onchange="showFileName(this)">
+                    <label for="id_content_image">
+                        <i class="fas fa-cloud-upload-alt mr-2"></i> Upload Content Image
+                    </label>
+                </div>
+                <div class="file-name" id="file-name"></div>
+                
+                <button type="submit" class="submit-btn">BLEND NOW</button>
             </div>
-
-            <button type="submit" class="btn btn-success">SUBMIT</button>
         </form>
     </div>
     <br>
     {% else %}
-    No styles present currently
+    <div class="container text-center">
+        <div class="alert alert-info">No styles present currently</div>
+    </div>
     {% endif %}
 
     {% if errors %}
     <div class="row justify-content-center">
-        <div class="offset-0 col-8 offset-sm-0 col-sm-10 offset-md-0 col-md-10">
+        <div class="col-12 col-md-8">
         {% for error in errors %}
             <div class="alert alert-danger text-center">{{error}}</div>
         {% endfor %}
@@ -54,6 +245,43 @@ Home
     </div>
     {% endif %}
     <br>
-        <hr>
-    </div>
-{% endblock %}
+    <hr>
+
+    <script>
+        function selectCard(card) {
+            // Remove selected class from all cards
+            document.querySelectorAll('.style-card').forEach(function(element) {
+                element.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked card
+            card.classList.add('selected');
+            
+            // Select the radio button
+            const radioButton = card.querySelector('input[type="radio"]');
+            radioButton.checked = true;
+        }
+        
+        function showFileName(input) {
+            const fileNameElement = document.getElementById('file-name');
+            if (input.files && input.files[0]) {
+                fileNameElement.textContent = input.files[0].name;
+                
+                // Add animation effect
+                fileNameElement.style.animation = 'none';
+                setTimeout(() => {
+                    fileNameElement.style.animation = 'fadeIn 0.5s';
+                }, 10);
+            } else {
+                fileNameElement.textContent = '';
+            }
+        }
+    </script>
+    
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+{% endblock %}  
