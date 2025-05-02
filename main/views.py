@@ -381,3 +381,12 @@ def updateProductQuantity(request):
         return HttpResponse("success")
         # return HttpResponse("fail")
     return HttpResponseNotFound("hello")
+
+from django.shortcuts import render
+
+def about(request):
+    return render(request, 'main/about.html')
+
+def collections(request):
+    return render(request, 'main/collections.html')  
+  # or 'your_app/about.html' if you nest templates
